@@ -7,7 +7,7 @@ import {
   DeleteHistoryMsgDays, DMS,
   Guild,
   Member, MessageSetting,
-  Mute, PinsMessage,
+  Mute, OpenApiError, PinsMessage,
   Role,
   Schedule,
   User
