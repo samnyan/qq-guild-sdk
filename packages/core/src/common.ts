@@ -352,3 +352,12 @@ export interface APIPermissionDemand {
   /** 接口权限链接中的机器人可使用功能的描述信息 */
   desc: string
 }
+
+export interface OpenApiError {
+  /** 错误码，见 https://bot.q.qq.com/wiki/develop/api/openapi/error/error.html */
+  code: number
+  /** 错误消息说明 */
+  message: string
+  /** 部分错误类型带有data */
+  data?: any
+}

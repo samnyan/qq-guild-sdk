@@ -29,6 +29,17 @@ export type InnerAxiosInstance = Omit<AxiosInstance, 'request' | TwoParamsMethod
 } & {
   [K in ThreeParamsMethod]: ThreeParamsRequest
 }
+export class RequestError<T = any> extends Error {
+  constructor(message: string, config: AxiosRequestConfig<T>, request?: any, data?: OpenApiError) {
+    super(message)
+    this.config = config
+    this.request = request
+    this.data = data
+  }
+  config: AxiosRequestConfig<T>;
+  request?: any;
+  data?: OpenApiError;
+}
 
 export type D<T> = {
   info: T
@@ -271,6 +282,15 @@ export class Api {
       (error: any) => Promise.reject(error)
     )
     a.interceptors.response.use((response: AxiosResponse) => {
+      if (response.status === 201 || response.status === 202) {
+        const err: RequestError = new RequestError<any>(
+          response.data.message,
+          response.config,
+          response.request,
+          response.data
+        )
+        return Promise.reject(err)
+      }
       return camelCaseObjKeys(response.data)
     }, async (error: AxiosError<{}>) => {
       const response = error?.response
